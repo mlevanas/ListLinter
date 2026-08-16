@@ -1,0 +1,27 @@
+from parser import Parser as parser
+from pdf_parser import PDFDetaliuSkaitytuvas
+from data.comparable_part import PartComparer
+import sys
+import time
+
+p = parser(sys.argv[1])
+
+detaliu_skaitytuvas = PDFDetaliuSkaitytuvas(sys.argv[2])
+start = time.perf_counter()
+
+print("Skaitomas PDF...")
+pdf_detales = detaliu_skaitytuvas.read_as_comparable()
+print("skaitomas Excel...")
+excel_detales = p.read_as_comparable()
+
+comparer = PartComparer()
+
+result = comparer.compare(pdf_detales, excel_detales)
+
+# uncomment this line to print results to console
+# comparer.printCompareResult(result)
+comparer.generateReport(result, './test_data/report.html')
+
+elapsed = time.perf_counter() - start
+
+print(f"Elapsed: {elapsed:.3f} s")
