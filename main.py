@@ -12,8 +12,7 @@ start = time.perf_counter()
 print("Skaitomas PDF...")
 pdf_detales = detaliu_skaitytuvas.read_as_comparable()
 print("skaitomas Excel...")
-excel_detales = p.read_as_comparable()
-
+excel_detales = p.read_excel()
 comparer = PartComparer()
 
 result = comparer.compare(pdf_detales, excel_detales)
