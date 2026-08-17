@@ -19,12 +19,12 @@ class display_title:
 
 @dataclass
 class Detale:
-    production_number: int
+    production_number: Optional[int]
     count: Optional[int]
     width: int
     height: int
     user2: Optional[str]
-    length: str
+    length: int 
     display_title: display_title
 
     def to_dict(self) -> dict:
@@ -54,9 +54,9 @@ class PDFDetaliuSkaitytuvas:
             ComparablePart(
                 count= int(x.count) if x.count is not None else "",
                 productionNumber=x.production_number,
-                width=float(x.width),
-                height=float(x.height),
-                lenght= x.length.replace("mm", "") if "mm" in x.length else x.length,
+                width=int(x.width),
+                height=int(x.height),
+                lenght= x.length,
                 user2= "" if x.user2 is None else x.user2
             ) for x in parts
         ]
