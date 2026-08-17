@@ -3,13 +3,14 @@ from dataclasses import dataclass, field
 from jinja2 import Environment, FileSystemLoader
 from zoneinfo import ZoneInfo
 import datetime
+from collections import defaultdict
 
 @dataclass(frozen=True)
 class ComparablePart:
     productionNumber:str = ''
-    width:int = 0
-    height:int = 0
-    lenght:str = ''
+    width:str = ''
+    height:str = ''
+    lenght:str= ''
     count:int = 0
     user2:str = ''
     title:str = ''
@@ -52,6 +53,7 @@ class PartComparer:
             source1 = "PDF",
             source2 = "Excel",
             differences = result.differences,
+            grouped = result.grouped,
             only_in_first = result.onlyInFirst,
             only_in_second = result.onlyInSecond
         )
@@ -114,6 +116,13 @@ class PartComparer:
             if productionNumber not in parts1Dict:
                 result.onlyInSecond.append(part2)
 
+
+        grouped = defaultdict(list)
+
+        for r in result.differences:
+            grouped[r.productionNumber].append(r)
+
+        result.grouped = dict(sorted(grouped.items(), key=lambda x: int(x[0])))
         return result
 
     def _comparePart(
@@ -126,8 +135,8 @@ class PartComparer:
         fields = [
             "width",
             "height",
-            "lenght",
             "count",
+            "lenght",
             "user2"
         ]
 
