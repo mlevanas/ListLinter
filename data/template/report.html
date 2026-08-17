@@ -101,6 +101,14 @@
             color: #155724;
             border-radius: 6px;
         }
+
+        .danger {
+            padding: 20px;
+            background: #0dcaf0;
+            border: 1px solid #c3e6cb;
+            color: #212529;
+            border-radius: 6px;
+        }
     </style>
 </head>
 
@@ -111,6 +119,10 @@
     <h1>Detalių palyginimo ataskaita</h1>
     <p>
         Ataskaitos sugeneravimo laikas: <b>{{ curr_time }}</b>
+    </p>
+
+    <p class="danger">
+        Ataskaitoje netikrinami skliautai ir priešvėjinė plėvelė.
     </p>
 
     <div class="summary">
@@ -133,7 +145,7 @@
     </div>
 
 
-    {% if differences %}
+    {% if grouped %}
 
     <div class="section">
 
@@ -152,24 +164,30 @@
 
             <tbody>
 
-                {% for diff in differences %}
+                {% for diff in grouped.keys() %}
 
                 <tr class="different">
 
                     <td>
-                        {{ diff.productionNumber }}
+                        {{ diff }}
                     </td>
 
                     <td>
-                        {{ diff.field }}
+                        {% for d in grouped[diff] %}
+                            {{ d.field }}<br>
+                        {% endfor %}
                     </td>
 
                     <td class="value-old">
-                        {{ diff.value1 }}
+                        {% for d in grouped[diff] %}
+                            {{ d.value1 }}<br>
+                        {% endfor %}
                     </td>
 
                     <td class="value-new">
-                        {{ diff.value2 }}
+                        {% for d in grouped[diff] %}
+                            {{ d.value2 }}<br>
+                        {% endfor %}
                     </td>
 
                 </tr>
