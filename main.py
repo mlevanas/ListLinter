@@ -7,6 +7,9 @@ import time
 p = parser(sys.argv[1])
 
 detaliu_skaitytuvas = PDFDetaliuSkaitytuvas(sys.argv[2])
+
+report_path = sys.argv[3] if len(sys.argv) > 3 else './report.html'
+
 start = time.perf_counter()
 
 print("Skaitomas PDF...")
@@ -19,7 +22,8 @@ result = comparer.compare(pdf_detales, excel_detales)
 
 # uncomment this line to print results to console
 # comparer.printCompareResult(result)
-comparer.generateReport(result)
+print(f"Report path: {report_path}")
+comparer.generateReport(result, report_path)
 
 elapsed = time.perf_counter() - start
 
