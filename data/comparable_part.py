@@ -4,6 +4,7 @@ from jinja2 import Environment, FileSystemLoader
 from zoneinfo import ZoneInfo
 import datetime
 from collections import defaultdict
+import os
 
 @dataclass(frozen=True)
 class ComparablePart:
@@ -43,7 +44,8 @@ class PartComparer:
 
 
     def generateReport(self, result:CompareResult, output_file: str='./report.html'):
-        env = Environment(loader=FileSystemLoader("data/template"))
+        template_path = os.path.dirname(os.path.realpath(__file__)) + "/template"
+        env = Environment(loader=FileSystemLoader(template_path))
 
         template = env.get_template("report.html")
         now = datetime.datetime.now(ZoneInfo("Europe/Vilnius"))

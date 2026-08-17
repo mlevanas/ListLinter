@@ -19,7 +19,7 @@ result = comparer.compare(pdf_detales, excel_detales)
 
 # uncomment this line to print results to console
 # comparer.printCompareResult(result)
-comparer.generateReport(result, './test_data/report.html')
+comparer.generateReport(result)
 
 elapsed = time.perf_counter() - start
 
