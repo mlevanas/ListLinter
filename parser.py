@@ -1,6 +1,6 @@
 import pandas as pd
 import math
-
+from collections import defaultdict
 from data.excelpart import ExcelPart
 from data.comparable_part import ComparablePart
 
@@ -9,50 +9,87 @@ class Parser:
     def __init__(self, excel_path):
         self.__excel_file = excel_path
 
-    def read_production_list(self) -> list[ExcelPart]:
-        df = pd.read_excel(self.__excel_file, sheet_name="Production list", header=2, usecols=["Eil. Nr.", "Plotis", "Aukštis", "Ilgis", "Pavadinimas", "User2", "Kiekis", "Komentaras", "Grupė"])
-        df["Ilgis"] = df["Ilgis"].fillna(None).astype(str)
-        df["User2"] = df["User2"].fillna(None).astype(str)
-        df["Eil. Nr."] = df["Eil. Nr."].fillna(None).astype("Int64")
+    def read_excel(self):
+        df = pd.read_excel(self.__excel_file, header=2, sheet_name="Production list")
+        _list = []
+
+        if("User4" in df.columns):
+            df = self.__configure_paletes(df)
+        else:
+            df = self.__configure_paprastas(df)
+
+        _list = self.read_as_comparable(df)
+        return _list
+    
+    def __configure_paprastas(self, df):
+        df["Ilgis"] = (df["Ilgis"].astype("string").fillna(""))
+        df["Kiekis"] = (pd.to_numeric(df["Kiekis"], errors="coerce").astype("Int64"))
+        df["Aukštis"] = (pd.to_numeric(df["Aukštis"], errors="coerce").astype("Int64"))
+        df["Plotis"] = (pd.to_numeric(df["Plotis"], errors="coerce").astype("Int64"))
+        df["User2"] = df["User2"].fillna("").astype("string")
+        df["Eil. Nr."] = (pd.to_numeric(df["Eil. Nr."], errors="coerce").astype("Int64").astype("string"))
+        df["Komentaras"] = df["Komentaras"].fillna("").astype(str)
+        df["Grupė"] = df["Grupė"].fillna("").astype(str)
+        return df
+
+    def __configure_paletes(self, df):
+        df["Ilgis"] = (df["Ilgis"].astype("string").fillna(""))
+        df["Kiekis"] = (pd.to_numeric(df["Kiekis"], errors="coerce").astype("Int64"))
+        df["Aukštis"] = (pd.to_numeric(df["Aukštis"], errors="coerce").astype("Int64"))
+        df["Plotis"] = (pd.to_numeric(df["Plotis"], errors="coerce").astype("Int64"))
+        df["User2"] = df["User2"].fillna("").astype("string")
+        df["User4"] = df["User4"].fillna("").astype(str)
+        df["Eil. Nr."] = (pd.to_numeric(df["Eil. Nr."], errors="coerce").astype("Int64").astype("string"))
+        df["Komentaras"] = df["Komentaras"].fillna("").astype(str)
+        df["Grupė"] = df["Grupė"].fillna("").astype(str)
+
+        return df
+
+    def __read_production_list(self, df) -> list[ExcelPart]:
         data = df.to_dict(orient="records")
-        return self.__filter(data)
+        filtered = self.__filter(data)
+        grouped = defaultdict(int)
 
-    def read_as_comparable(self) -> list[ComparablePart]:
-        parts = self.read_production_list()
+        format_ilgis = lambda ilgis: str(ilgis).replace(".0", "") + 'mm'
 
+        for part in filtered:
+            raktas = (
+                part["Eil. Nr."],
+                part["Plotis"],
+                part["Aukštis"],
+                format_ilgis(part["Ilgis"]) if 'M' not in part['Ilgis'] else part['Ilgis'],
+                part["Pavadinimas"],
+                part["User2"],
+                part["Komentaras"],
+                part["Grupė"])
+            grouped[raktas] += part["Kiekis"] if part["Kiekis"] is not None else 0
+        return grouped
+
+    def read_as_comparable(self, df) -> list[ComparablePart]:
+        parts = self.__read_production_list(df)
         comparable_parts = [
             ComparablePart(
-                count= x.count,
-                productionNumber=str(x.productionNumber),
-                width=x.width,
-                height=x.height,
-                lenght=x.lenght,
-                user2=x.user2,
-                title=x.pavadinimas,
-                group=x.group
+                count = parts[x] if parts[x] != 0 else '',
+                productionNumber= x[0],
+                width=x[1],
+                height=x[2],
+                lenght=x[3],
+                title=x[4],
+                user2=x[5],
+                group=x[6]
             ) for x in parts
         ]
 
         return comparable_parts
 
     #------------------------------------------------------
-    # filter records with at least one property available
+    # filter records with production number
     #------------------------------------------------------
-    def __filter(self, data_json):
-        result = set()
-        for record in data_json:
-            if (not pd.isna(record["Eil. Nr."])):
-                p = ExcelPart(
-                comment = record["Komentaras"],
-                group = record["Grupė"],
-                count = "" if pd.isna(record["Kiekis"]) else int(record["Kiekis"]),
-                productionNumber = str(record["Eil. Nr."]),
-                user2 = "" if pd.isna(record["User2"]) else record["User2"],
-                width = record["Plotis"],
-                height = record["Aukštis"],
-                lenght = record["Ilgis"],
-                pavadinimas = record["Pavadinimas"]
-                )
-                result.add(p)
+    def __filter(self, data):
         
-        return result
+        filtered = []
+
+        for part in data:
+            if not pd.isna(part["Eil. Nr."]):
+                filtered.append(part)
+        return filtered
