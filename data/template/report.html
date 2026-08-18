@@ -123,7 +123,8 @@
 
     <h1>Detalių palyginimo ataskaita</h1>
     <p>
-        Ataskaitos sugeneravimo laikas: <b>{{ curr_time }}</b>
+        Ataskaitos sugeneravimo laikas: <b>{{ params.currentTime }}</b><br>
+        Palyginimas truko: <b>{{ params.timeEllapsed }}</b>
     </p>
 
     <p>
@@ -135,8 +136,8 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>{{ source1 }}</td>
-                    <td>{{ source2 }}</td>
+                    <td>{{ params.pdfFile }}</td>
+                    <td>{{ params.excelFile }}</td>
                 </tr>
             </tbody>
         </table>
