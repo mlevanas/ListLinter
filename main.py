@@ -1,6 +1,7 @@
 from parser import Parser as parser
 from pdf_parser import PDFDetaliuSkaitytuvas
 from data.comparable_part import PartComparer
+from data.comparable_part import InputParameters
 import sys
 import time
 
@@ -23,8 +24,11 @@ result = comparer.compare(pdf_detales, excel_detales)
 # uncomment this line to print results to console
 # comparer.printCompareResult(result)
 print(f"Report path: {report_path}")
-comparer.generateReport(result, sys.argv[1], sys.argv[2], report_path)
-
 elapsed = time.perf_counter() - start
+
+params = InputParameters(sys.argv[1], sys.argv[2], report_path, elapsed)
+
+comparer.generateReport(result, params)
+
 
 print(f"Elapsed: {elapsed:.3f} s")
