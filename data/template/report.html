@@ -32,6 +32,10 @@
             margin-top: 0;
         }
 
+        h3{
+            text-align: center;
+        }
+
         .summary {
             display: flex;
             gap: 20px;
@@ -172,8 +176,8 @@
         </p>
 
         <p>
+            <h3>Palyginti failai</h3>
         <table>
-            <caption class="caption">Palyginti failai</caption>
             <thead>
                 <th>PDF failas</th>
                 <th>Excel failas</th>
@@ -423,7 +427,7 @@
     <script type="text/javascript">
         $(function () {
             $('#expander').on('click', function () {
-                $('#tables').toggle();
+                $('#tables').toggle(300);
             });
         });
     </script>
