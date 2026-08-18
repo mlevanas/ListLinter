@@ -1,5 +1,4 @@
-#define path to Python script here...
-$script:script_path = 'C:\scripts\list-linter\ListLinter\main.py'
+$script:script_path = $PSScriptRoot + '\..\main.py'
 
 function New-HtmlReport {
     param(
