@@ -58,26 +58,26 @@ class InputParameters:
 
 class PartComparer:
 
-
-    def generateReport(self, result:CompareResult, excelFile: str, pdfFile: str, output_file: str='./report.html'):
+    def __buildEnvironment(self):
         template_path = os.path.dirname(os.path.realpath(__file__)) + "/template"
-        env = Environment(loader=FileSystemLoader(template_path))
+        return Environment(loader=FileSystemLoader(template_path))
+
+    def __writeHtml(self, html:str, outputFile:str):
+        with open(outputFile, "w", encoding="utf-8") as file:
+            file.write(html)
+
+    def generateReport(self, result:CompareResult, params: InputParameters):
+        env = self.__buildEnvironment()
 
         template = env.get_template("report.html")
-        now = datetime.datetime.now(ZoneInfo("Europe/Vilnius"))
-        formated_time = now.strftime("%Y-%m-%d %H:%M:%S")
         html = template.render(
-            curr_time = formated_time,
-            source1 = pdfFile,
-            source2 = excelFile,
-            differences = result.differences,
+            params = params,
             grouped = result.grouped,
             only_in_first = result.onlyInFirst,
-            only_in_second = result.onlyInSecond
+            only_in_second = result.onlyInSecond,
         )
-
-        with open(output_file, "w", encoding="utf-8") as file:
-            file.write(html)
+        
+        self.__writeHtml(html, params.outputFile)
 
 
     def printCompareResult(self, compareResult:CompareResult):
