@@ -39,6 +39,22 @@ class CompareResult:
             and len(self.differences) == 0
         )
 
+@dataclass
+class InputParameters:
+    excelFile: str=''
+    pdfFile: str=''
+    outputFile: str='./report.html'
+    _time_elapsed: str=''
+
+    @property
+    def currentTime(self) -> str:
+        now = datetime.datetime.now(ZoneInfo("Europe/Vilnius"))
+        formated_time = now.strftime("%Y-%m-%d %H:%M:%S")
+        return formated_time
+
+    @property
+    def timeEllapsed(self) -> str:
+        return f"{self._time_elapsed:.3f}s"
 
 class PartComparer:
 
