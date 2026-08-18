@@ -23,7 +23,7 @@ result = comparer.compare(pdf_detales, excel_detales)
 # uncomment this line to print results to console
 # comparer.printCompareResult(result)
 print(f"Report path: {report_path}")
-comparer.generateReport(result, report_path)
+comparer.generateReport(result, sys.argv[1], sys.argv[2], report_path)
 
 elapsed = time.perf_counter() - start
 
