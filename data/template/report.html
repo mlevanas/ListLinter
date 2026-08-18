@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="lt">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,8 +13,8 @@
             background: #f5f5f5;
             color: #333;
         }
-        
-        .caption{
+
+        .caption {
             font-weight: bold;
             text-transform: uppercase;
         }
@@ -113,64 +114,64 @@
             color: #212529;
             border-radius: 6px;
         }
-    
+
         /*mygtuko stiliai*/
-       .btn-black {
-    display: inline-block;
-    padding: 0.375rem 0.75rem;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
+        .btn-black {
+            display: inline-block;
+            padding: 0.375rem 0.75rem;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.5;
 
-    color: #fff;
-    background-color: #000;
-    border: 1px solid #000;
-    border-radius: 0.375rem;
+            color: #fff;
+            background-color: #000;
+            border: 1px solid #000;
+            border-radius: 0.375rem;
 
-    text-align: center;
-    text-decoration: none;
-    cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
 
-    transition:
-        background-color 0.15s ease-in-out,
-        border-color 0.15s ease-in-out,
-        box-shadow 0.15s ease-in-out;
-}
+            transition:
+                background-color 0.15s ease-in-out,
+                border-color 0.15s ease-in-out,
+                box-shadow 0.15s ease-in-out;
+        }
 
-.btn-black:hover {
-    color: #fff;
-    background-color: #2b2b2b;
-    border-color: #2b2b2b;
-}
+        .btn-black:hover {
+            color: #fff;
+            background-color: #2b2b2b;
+            border-color: #2b2b2b;
+        }
 
-.btn-black:focus {
-    outline: 0;
-    box-shadow: 0 0 0 0.25rem rgba(0, 0, 0, 0.25);
-}
+        .btn-black:focus {
+            outline: 0;
+            box-shadow: 0 0 0 0.25rem rgba(0, 0, 0, 0.25);
+        }
 
-.btn-black:active {
-    background-color: #444;
-    border-color: #444;
-}
+        .btn-black:active {
+            background-color: #444;
+            border-color: #444;
+        }
 
-.btn-black:disabled {
-    opacity: 0.65;
-    cursor: not-allowed;
-} 
+        .btn-black:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 
 <body>
 
-<div class="container">
+    <div class="container">
 
-    <h1>Detalių palyginimo ataskaita</h1>
-    <p>
-        Ataskaitos sugeneravimo laikas: <b>{{ params.currentTime }}</b><br>
-        Palyginimas truko: <b>{{ params.timeEllapsed }}</b>
-    </p>
+        <h1>Detalių palyginimo ataskaita</h1>
+        <p>
+            Ataskaitos sugeneravimo laikas: <b>{{ params.currentTime }}</b><br>
+            Palyginimas truko: <b>{{ params.timeEllapsed }}</b>
+        </p>
 
-    <p>
+        <p>
         <table>
             <caption class="caption">Palyginti failai</caption>
             <thead>
@@ -184,245 +185,248 @@
                 </tr>
             </tbody>
         </table>
-    </p>
+        </p>
 
-    <p class="summary-box">
-        Ataskaitoje netikrinami skliautai ir priešvėjinė plėvelė.
-    </p>
+        <p class="summary-box">
+            Ataskaitoje netikrinami skliautai ir priešvėjinė plėvelė.
+        </p>
 
-    <div class="summary">
+        <div class="summary">
 
-        <div class="summary-box">
-            Skirtumai
-            <strong>{{ differences|length }}</strong>
+            <div class="summary-box">
+                Skirtumai
+                <strong>{{ differences|length }}</strong>
+            </div>
+
+            <div class="summary-box">
+                Tik PDF sąraše
+                <strong>{{ only_in_first|length }} detalių</strong>
+            </div>
+
+            <div class="summary-box">
+                Tik Excel sąraše
+                <strong>{{ only_in_second|length }} detalių</strong>
+            </div>
+
         </div>
 
-        <div class="summary-box">
-            Tik PDF sąraše
-            <strong>{{ only_in_first|length }} detalių</strong>
-        </div>
 
-        <div class="summary-box">
-            Tik Excel sąraše
-            <strong>{{ only_in_second|length }} detalių</strong>
-        </div>
+        {% if grouped %}
 
-    </div>
+        <div class="section">
 
+            <h2>Rasti skirtumai</h2>
 
-    {% if grouped %}
+            <table>
 
-    <div class="section">
+                <thead>
+                    <tr>
+                        <th>Production number</th>
+                        <th>Atributas</th>
+                        <th>PDF</th>
+                        <th>Excel</th>
+                    </tr>
+                </thead>
 
-        <h2>Rasti skirtumai</h2>
+                <tbody>
 
-        <table>
+                    {% for diff in grouped.keys() %}
 
-            <thead>
-                <tr>
-                    <th>Production number</th>
-                    <th>Atributas</th>
-                    <th>PDF</th>
-                    <th>Excel</th>
-                </tr>
-            </thead>
+                    <tr class="different">
 
-            <tbody>
+                        <td>
+                            {{ diff }}
+                        </td>
 
-                {% for diff in grouped.keys() %}
-
-                <tr class="different">
-
-                    <td>
-                        {{ diff }}
-                    </td>
-
-                    <td>
-                        {% for d in grouped[diff] %}
+                        <td>
+                            {% for d in grouped[diff] %}
                             {{ d.field }}<br>
-                        {% endfor %}
-                    </td>
+                            {% endfor %}
+                        </td>
 
-                    <td class="value-old">
-                        {% for d in grouped[diff] %}
+                        <td class="value-old">
+                            {% for d in grouped[diff] %}
                             {{ d.value1 }}<br>
-                        {% endfor %}
-                    </td>
+                            {% endfor %}
+                        </td>
 
-                    <td class="value-new">
-                        {% for d in grouped[diff] %}
+                        <td class="value-new">
+                            {% for d in grouped[diff] %}
                             {{ d.value2 }}<br>
+                            {% endfor %}
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% endif %}
+
+
+        {% if only_in_first %}
+
+        <div class="section">
+
+            <h2>Detalės, esančios tik PDF faile</h2>
+
+            {% for part in only_in_first %}
+
+            <div class="part-card">
+
+                <strong>Nr. {{ part.productionNumber }}</strong>
+
+                <br>
+                Pavadinimas: <b>{{ part.title }}</b>
+                |
+                Plotis: {{ part.width }}
+                |
+                Aukštis: {{ part.height }}
+                |
+                Ilgis: {{ part.lenght }}
+                |
+                Kiekis: {{ part.count }}
+                |
+                User2: {{ part.user2 }}
+                |
+                Group: {{ part.group }}
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% endif %}
+
+
+        {% if only_in_second %}
+
+        <div class="section">
+
+            <h2>Detalės, esančios tik Excel faile</h2>
+
+            {% for part in only_in_second %}
+
+            <div class="part-card">
+
+                <strong>Nr. {{ part.productionNumber }}</strong>
+
+                <br>
+
+                Pavadinimas: <b>{{ part.title }}</b>
+                |
+                Plotis: {{ part.width }}
+                |
+                Aukštis: {{ part.height }}
+                |
+                Ilgis: {{ part.lenght }}
+                |
+                Kiekis: {{ part.count }}
+                |
+                User2: {{ part.user2 }}
+                |
+                Group: {{ part.group }}
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% endif %}
+
+
+        {% if not differences and not only_in_first and not only_in_second %}
+
+        <div class="success">
+
+            <strong>Skirtumų nerasta.</strong>
+
+            Abu detalių sąrašai sutampa.
+
+        </div>
+
+        {% endif %}
+        <p>
+            <button id="expander" class="btn-black">Rodyti/slėpti detales</button>
+        <div id="tables" class="summary" style="display: none;">
+
+            <div class="summary-box">
+                <h3>PDF detalės</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>P/N</th>
+                            <th>Width</th>
+                            <th>Height</th>
+                            <th>Length</th>
+                            <th>Count</th>
+                            <th>User2</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for part in params.pdfList %}
+                        <tr>
+                            <td>{{ part.productionNumber }}</td>
+                            <td>{{ part.width }}</td>
+                            <td>{{ part.height }}</td>
+                            <td>{{ part.lenght }}</td>
+                            <td>{{ part.count }}</td>
+                            <td>{{ part.user2 }}</td>
+                        </tr>
                         {% endfor %}
-                    </td>
+                    </tbody>
+                </table>
+            </div>
 
-                </tr>
-
-                {% endfor %}
-
-            </tbody>
-
-        </table>
-
-    </div>
-
-    {% endif %}
-
-
-    {% if only_in_first %}
-
-    <div class="section">
-
-        <h2>Detalės, esančios tik PDF faile</h2>
-
-        {% for part in only_in_first %}
-
-        <div class="part-card">
-
-            <strong>Nr. {{ part.productionNumber }}</strong>
-
-            <br>
-            Pavadinimas: <b>{{ part.title }}</b>
-            |
-            Plotis: {{ part.width }}
-            |
-            Aukštis: {{ part.height }}
-            |
-            Ilgis: {{ part.lenght }}
-            |
-            Kiekis: {{ part.count }}
-            |
-            User2: {{ part.user2 }}
-            |
-            Group: {{ part.group }}
-            
+            <div class="summary-box">
+                <h3>Excel detalės</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>P/N</th>
+                            <th>Width</th>
+                            <th>Height</th>
+                            <th>Length</th>
+                            <th>Count</th>
+                            <th>User2</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for part in params.excelList %}
+                        <tr>
+                            <td>{{ part.productionNumber }}</td>
+                            <td>{{ part.width }}</td>
+                            <td>{{ part.height }}</td>
+                            <td>{{ part.lenght }}</td>
+                            <td>{{ part.count }}</td>
+                            <td>{{ part.user2 }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
-
-        {% endfor %}
-
+        </p>
     </div>
 
-    {% endif %}
-
-
-    {% if only_in_second %}
-
-    <div class="section">
-
-        <h2>Detalės, esančios tik Excel faile</h2>
-
-        {% for part in only_in_second %}
-
-        <div class="part-card">
-
-            <strong>Nr. {{ part.productionNumber }}</strong>
-
-            <br>
-
-            Pavadinimas: <b>{{ part.title }}</b>
-            |
-            Plotis: {{ part.width }}
-            |
-            Aukštis: {{ part.height }}
-            |
-            Ilgis: {{ part.lenght }}
-            |
-            Kiekis: {{ part.count }}
-            |
-            User2: {{ part.user2 }}
-            |
-            Group: {{ part.group }}
-
-        </div>
-
-        {% endfor %}
-
-    </div>
-
-    {% endif %}
-
-
-    {% if not differences and not only_in_first and not only_in_second %}
-
-    <div class="success">
-
-        <strong>Skirtumų nerasta.</strong>
-
-        Abu detalių sąrašai sutampa.
-
-    </div>
-
-    {% endif %}
-    <p>
-    <button id="expander" class="btn-black">Rodyti/slėpti detales</button>
-    <div id="tables" class="summary" style="display: none;">
-
-        <div class="summary-box">
-            <h3>PDF detalės</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>P/N</th>
-                        <th>Width</th>
-                        <th>Height</th>
-                        <th>Length</th>
-                        <th>Count</th>
-                        <th>User2</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for part in params.pdfList %}
-                    <tr>
-                        <td>{{ part.productionNumber }}</td>
-                        <td>{{ part.width }}</td>
-                        <td>{{ part.height }}</td>
-                        <td>{{ part.lenght }}</td>
-                        <td>{{ part.count }}</td>
-                        <td>{{ part.user2 }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-        <div class="summary-box">
-            <h3>Excel detalės</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>P/N</th>
-                        <th>Width</th>
-                        <th>Height</th>
-                        <th>Length</th>
-                        <th>Count</th>
-                        <th>User2</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for part in params.excelList %}
-                    <tr>
-                        <td>{{ part.productionNumber }}</td>
-                        <td>{{ part.width }}</td>
-                        <td>{{ part.height }}</td>
-                        <td>{{ part.lenght }}</td>
-                        <td>{{ part.count }}</td>
-                        <td>{{ part.user2 }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-        </p> 
-</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/4.0.0/jquery.min.js" integrity="sha512-8LENNbXmzI/Gbj+OwXmqR6V4QaUAw0/porPzy1+dQoJqC0JPHedWoe0DDOTL2uHA5XXJyIsPtiMHH86pVlay6A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script type="text/javascript">
-    $(function(){
-        $('#expander').on('click', function(){
-            $('#tables').toggle();
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/4.0.0/jquery.min.js"
+        integrity="sha512-8LENNbXmzI/Gbj+OwXmqR6V4QaUAw0/porPzy1+dQoJqC0JPHedWoe0DDOTL2uHA5XXJyIsPtiMHH86pVlay6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#expander').on('click', function () {
+                $('#tables').toggle();
+            });
         });
-    });
-</script>
+    </script>
 
 </body>
+
 </html>
