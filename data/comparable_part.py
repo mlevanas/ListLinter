@@ -41,10 +41,12 @@ class CompareResult:
 
 @dataclass
 class InputParameters:
-    excelFile: str=''
-    pdfFile: str=''
+    _excelFile: str=''
+    _pdfFile: str=''
     outputFile: str='./report.html'
     _time_elapsed: str=''
+    pdfList: list[ComparablePart] = field(default_factory=list)
+    excelList: list[ComparablePart] = field(default_factory=list)
 
     @property
     def currentTime(self) -> str:
@@ -55,6 +57,14 @@ class InputParameters:
     @property
     def timeEllapsed(self) -> str:
         return f"{self._time_elapsed:.3f}s"
+
+    @property
+    def excelFile(self):
+        return os.path.basename(self._excelFile)
+
+    @property
+    def pdfFile(self) -> str:
+        return os.path.basename(self._pdfFile)
 
 class PartComparer:
 

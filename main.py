@@ -4,6 +4,7 @@ from data.comparable_part import PartComparer
 from data.comparable_part import InputParameters
 import sys
 import time
+import natsort
 
 p = parser(sys.argv[1])
 
@@ -26,7 +27,7 @@ result = comparer.compare(pdf_detales, excel_detales)
 print(f"Report path: {report_path}")
 elapsed = time.perf_counter() - start
 
-params = InputParameters(sys.argv[1], sys.argv[2], report_path, elapsed)
+params = InputParameters(sys.argv[1], sys.argv[2], report_path, elapsed, pdfList=natsort.natsorted(pdf_detales, lambda x: x.productionNumber), excelList=natsort.natsorted(excel_detales, lambda x: x.productionNumber))
 
 comparer.generateReport(result, params)
 
