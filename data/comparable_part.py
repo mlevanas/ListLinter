@@ -43,7 +43,7 @@ class CompareResult:
 class PartComparer:
 
 
-    def generateReport(self, result:CompareResult, s1: str, s2: str, output_file: str='./report.html'):
+    def generateReport(self, result:CompareResult, excelFile: str, pdfFile: str, output_file: str='./report.html'):
         template_path = os.path.dirname(os.path.realpath(__file__)) + "/template"
         env = Environment(loader=FileSystemLoader(template_path))
 
@@ -52,8 +52,8 @@ class PartComparer:
         formated_time = now.strftime("%Y-%m-%d %H:%M:%S")
         html = template.render(
             curr_time = formated_time,
-            source1 = s1,
-            source2 = s2,
+            source1 = pdfFile,
+            source2 = excelFile,
             differences = result.differences,
             grouped = result.grouped,
             only_in_first = result.onlyInFirst,
