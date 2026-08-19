@@ -23,6 +23,12 @@ comparer = PartComparer()
 result = comparer.compare(pdf_detales, excel_detales)
 
 # uncomment this line to print results to console
+
+if(result.isEqual):
+    print("\nDuomenys sutampa\n")
+else:
+    print("\nDuomenys NESUTAMPA\n")
+
 # comparer.printCompareResult(result)
 print(f"Report path: {report_path}")
 elapsed = time.perf_counter() - start
