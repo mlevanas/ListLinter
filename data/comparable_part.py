@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from dataclasses import dataclass, field
 from jinja2 import Environment, FileSystemLoader
 from zoneinfo import ZoneInfo
-import datetime
+from datetime import datetime
 from collections import defaultdict
 import os
 
@@ -50,7 +50,7 @@ class InputParameters:
 
     @property
     def currentTime(self) -> str:
-        now = datetime.datetime.now(ZoneInfo("Europe/Vilnius"))
+        now = datetime.now(ZoneInfo("Europe/Vilnius"))
         formated_time = now.strftime("%Y-%m-%d %H:%M:%S")
         return formated_time
 
