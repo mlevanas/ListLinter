@@ -1,7 +1,6 @@
 from parser import Parser as parser
 from pdf_parser import PDFDetaliuSkaitytuvas
-from data.comparable_part import PartComparer
-from data.comparable_part import InputParameters
+from data.comparable_part import PartComparer, InputParameters
 import sys
 import time
 import natsort
