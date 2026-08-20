@@ -16,5 +16,20 @@ function New-HtmlReport {
             Exit
         }
 
-    py.exe $script_path $ExcelFile $PdfFile $OutputFile
+	$oldErrorAction =  $ErrorActionPreference
+	try
+	{
+        	py.exe $script_path $ExcelFile $PdfFile $OutputFile
+		$exitCode = $LASTEXITCODE
+	}
+	
+	finally {
+		$ErrorActionPreference = $oldErrorAction
+		if($exitCode -eq 1){
+			Write-Host -ForegroundColor Red "Duoemnys nesutampa"
+		}
+		else{
+			write-host -ForegroundColor Green "Duomenys sutampa"
+		}
+	}
 }
