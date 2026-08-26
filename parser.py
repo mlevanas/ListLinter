@@ -57,7 +57,7 @@ class Parser:
                 part["Eil. Nr."],
                 part["Plotis"],
                 part["Aukštis"],
-                format_ilgis(part["Ilgis"]) if 'M' not in part['Ilgis'] else part['Ilgis'],
+                format_ilgis(part["Ilgis"]) if 'M' not in str(part['Ilgis']).upper() else part['Ilgis'],
                 part["Pavadinimas"],
                 part["User2"],
                 part["Komentaras"],
@@ -73,7 +73,7 @@ class Parser:
                 productionNumber= x[0],
                 width=x[1],
                 height=x[2],
-                lenght=x[3],
+                lenght=str(x[3]).lower(),
                 title=x[4],
                 user2=x[5],
                 group=x[6]

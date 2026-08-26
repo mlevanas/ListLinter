@@ -56,7 +56,7 @@ class PDFDetaliuSkaitytuvas:
                 productionNumber=x.production_number,
                 width=int(x.width),
                 height=int(x.height),
-                lenght= x.length,
+                lenght= str(x.length).lower(),
                 user2= "" if x.user2 is None else x.user2
             ) for x in parts
         ]
