@@ -40,8 +40,13 @@
             Ataskaitoje netikrinami skliautai ir priešvėjinė plėvelė.
         </p>
 
-        {% if grouped or only_in_first or only_in_second %}
+        {% if grouped or only_in_first or only_in_second or params.duplicateParts %}
         <div class="summary">
+            
+            <div class="summary-box">
+               Dublikatų PDF sąraše
+                <strong>{{ params.duplicateParts|length }} detalių</strong>
+            </div>
 
             <div class="summary-box">
                 Skirtumai
