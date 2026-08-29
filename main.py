@@ -15,6 +15,7 @@ start = time.perf_counter()
 
 print("Skaitomas PDF...")
 pdf_detales = detaliu_skaitytuvas.read_as_comparable()
+duplicates = detaliu_skaitytuvas.duplicates
 print("skaitomas Excel...")
 excel_detales = p.read_excel()
 comparer = PartComparer()
@@ -26,11 +27,14 @@ result = comparer.compare(pdf_detales, excel_detales)
 print(f"Report path: {report_path}")
 elapsed = time.perf_counter() - start
 
-params = InputParameters(sys.argv[1], sys.argv[2], report_path, elapsed, pdfList=natsort.natsorted(pdf_detales, lambda x: x.productionNumber), excelList=natsort.natsorted(excel_detales, lambda x: x.productionNumber))
+params = InputParameters(sys.argv[1], sys.argv[2], report_path, elapsed, 
+pdfList = natsort.natsorted(pdf_detales, lambda x: x.productionNumber),
+ excelList = natsort.natsorted(excel_detales, lambda x: x.productionNumber),
+ duplicateParts = duplicates)
 
 comparer.generateReport(result, params)
 
 
 print(f"Elapsed: {elapsed:.3f} s")
 
-sys.exit(1) if not result.isEqual else sys.exit(0)
+sys.exit(1) if not result.isEqual or len(duplicates) > 0 else sys.exit(0)

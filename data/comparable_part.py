@@ -47,6 +47,7 @@ class InputParameters:
     _time_elapsed: str=''
     pdfList: list[ComparablePart] = field(default_factory=list)
     excelList: list[ComparablePart] = field(default_factory=list)
+    duplicateParts: list = field(default_factory=list)
 
     @property
     def currentTime(self) -> str:

@@ -118,6 +118,18 @@
 
         {% endif %}
 
+        
+        {% if params.duplicateParts %}
+        <div class="section">
+            <h2>Detalės PDF faile tuo pačiu pozicijos numeriu</h2>
+            
+            {% for part in params.duplicateParts %}
+                <div class="part-card">
+                    <strong>Nr. {{ part }}</strong>
+                </div>
+           {% endfor %}
+        </div>
+        {% endif %}
 
         {% if only_in_first %}
 
@@ -192,7 +204,7 @@
         {% endif %}
 
 
-        {% if not grouped and not only_in_first and not only_in_second %}
+        {% if not grouped and not only_in_first and not only_in_second and not params.duplicateParts %}
 
         <div class="success">
 

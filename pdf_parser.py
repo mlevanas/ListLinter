@@ -5,6 +5,7 @@ from typing import Optional
 from data.comparable_part import ComparablePart
 import math
 import pdfplumber
+from collections import Counter
 
 
 @dataclass
@@ -39,6 +40,8 @@ class PDFDetaliuSkaitytuvas:
         "P.C."
     }
 
+    duplicates: list[Detale]
+
     def __init__(
         self,
         pdf_path: str,
@@ -46,10 +49,11 @@ class PDFDetaliuSkaitytuvas:
     ):
         self.__pdf_path = Path(pdf_path)
         self.__right_side_start = right_side_start
+        self.duplicates = list()
 
     def read_as_comparable(self) -> list[ComparablePart]:
         parts = self.read()
-        
+        self.duplicates = self.__checkDuplicates(parts)
         comparable_parts = [
             ComparablePart(
                 count= int(x.count) if x.count is not None else "",
@@ -62,6 +66,20 @@ class PDFDetaliuSkaitytuvas:
         ]
 
         return comparable_parts
+
+    def duplicates(self):
+        return self.duplicates
+
+    def __checkDuplicates(self, detales: list[Detale]) -> list[str]:
+        """
+        Gaunami PDF faile esančiu detaliu pozicijos numeriai, kurie kartojasi
+        """
+
+        prod_numbers = [x.production_number for x in detales]
+
+        counts = Counter(prod_numbers)
+        dubplicates = [item for item, count in counts.items() if count > 1 ]
+        return dubplicates
 
     def read(self) -> list[Detale]:
         """
